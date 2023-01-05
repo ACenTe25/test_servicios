@@ -7,7 +7,7 @@ fn main() {
     
     println!("[I] ARRANQUE");
 
-    abrir_twinkle();
+    abre_twinkle_con_sh_inyectando_stdin();
 
     println!("[I] FIN");
 
@@ -185,10 +185,10 @@ fn abre_twinkle_con_sh_inyectando_stdin() {
 
     println!(" [I] ABRIENDO TWINKLE...");
 
-    shell_stdin_1.write(b"twinkle -c -f /home/nsm/twinkle.cfg\n").ok();
+    shell_stdin_1.write(b"twinkle -c -f /home/nsm/twinkle.cfg >> /twinkle_stdout_test.txt\n").ok();
 
     println!(" [I] ESPERANDO A TWINKLE...");
-    sleep(Duration::from_secs(10));
+    sleep(Duration::from_secs(30));
 
     println!(" [I] DANDO TWINKLE QUIT");
     shell_stdin_1.write(b"quit\n\n\n").ok();
