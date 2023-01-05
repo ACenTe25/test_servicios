@@ -1,5 +1,5 @@
 use std::process::{Command, Output};
-use std::io::Read;
+use std::io::{Read, Write};
 use std::thread::sleep;
 use std::time::Duration;
 
@@ -7,7 +7,7 @@ fn main() {
     
     println!("[I] ARRANQUE");
 
-    hacer_ls_con_sh();
+    abre_twinkle_con_sh_inyectando_stdin();
 
     println!("[I] FIN");
 
@@ -110,7 +110,7 @@ fn abrir_twinkle_con_sh() {
 fn hacer_ls_con_sh() {
     println!(" [I] HACIENDO ls -alh CON sh...");
 
-    let mut proc_twinkle = Command::new("sh")
+    let mut proc_twinkle = Command::new("bash")
     .args(["-c", "ls -alh"])
     .spawn()
     .expect("[E] FALLA AL HACER ls");
@@ -142,4 +142,60 @@ fn hacer_ls_con_sh() {
     println!("  [I] STDOUT ls: {}", stdout_twinkle);
 
     println!("  [I] STDERR ls: {}", stderr_twinkle);
+}
+
+fn prueba_inyeccion_stdin() {
+
+    let mut mi_shell = Command::new("sh")
+    .arg("-m")
+    .stdin(std::process::Stdio::piped())
+    .stdout(std::process::Stdio::piped())
+    .spawn()
+    .expect("No abrí shell");
+
+    let shell_stdin = mi_shell.stdin.as_mut().unwrap();
+
+    shell_stdin.write(b"ls -alh\n").ok();
+
+    sleep(Duration::from_secs(2));
+
+    shell_stdin.write(b"exit\n").ok();
+
+    let output = mi_shell.wait_with_output().expect("no se pudo leer stdout");
+
+    let salida = String::from_utf8_lossy(&output.stdout);
+
+    println!("Salida: {}", salida);
+
+}
+
+fn abre_twinkle_con_sh_inyectando_stdin() {
+
+    let mut mi_shell_1 = Command::new("sh")
+    .arg("-m")
+    .stdin(std::process::Stdio::piped())
+    .stdout(std::process::Stdio::piped())
+    .stderr(std::process::Stdio::piped())
+    .spawn()
+    .expect("No abrí shell");
+
+    let shell_stdin_1 = mi_shell_1.stdin.as_mut().unwrap();
+
+    shell_stdin_1.write(b"twinkle -c -f /home/nsm/twinkle.cfg\n").ok();
+
+    sleep(Duration::from_secs(3));
+
+    shell_stdin_1.write(b"quit\n\n\n").ok();
+
+    sleep(Duration::from_secs(3));
+
+    shell_stdin_1.write(b"exit\n").ok();
+
+    let out = mi_shell_1.wait_with_output().expect("no capturó stdout");
+
+    let salida_string = String::from_utf8_lossy(&out.stdout);
+    let err_string = String::from_utf8_lossy(&out.stderr);
+
+    println!("SALIDA: {}\nERROR: {}", salida_string, err_string);
+
 }
