@@ -171,6 +171,8 @@ fn prueba_inyeccion_stdin() {
 
 fn abre_twinkle_con_sh_inyectando_stdin() {
 
+    println!("[I] Abriendo shell...");
+
     let mut mi_shell_1 = Command::new("sh")
     .arg("-m")
     .stdin(std::process::Stdio::piped())
@@ -181,16 +183,23 @@ fn abre_twinkle_con_sh_inyectando_stdin() {
 
     let shell_stdin_1 = mi_shell_1.stdin.as_mut().unwrap();
 
+    println!(" [I] ABRIENDO TWINKLE...");
+
     shell_stdin_1.write(b"twinkle -c -f /home/nsm/twinkle.cfg\n").ok();
 
-    sleep(Duration::from_secs(3));
+    println!(" [I] ESPERANDO A TWINKLE...");
+    sleep(Duration::from_secs(10));
 
+    println!(" [I] DANDO TWINKLE QUIT");
     shell_stdin_1.write(b"quit\n\n\n").ok();
 
-    sleep(Duration::from_secs(3));
+    println!(" [I] ESPERANDO TWINKLE QUIT");
+    sleep(Duration::from_secs(30));
 
+    println!(" [I] DANDO sh exit");
     shell_stdin_1.write(b"exit\n").ok();
 
+    println!(" [I] Esperando al child...");
     let out = mi_shell_1.wait_with_output().expect("no capturó stdout");
 
     let salida_string = String::from_utf8_lossy(&out.stdout);
