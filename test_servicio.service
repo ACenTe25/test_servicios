@@ -1,0 +1,14 @@
+[Unit]
+Description=Servicio de Pruebas
+Requires=network-online.target
+After=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/home/nsm/.local/bin/test_servicios
+
+[Install]
+WantedBy=multi-user.target

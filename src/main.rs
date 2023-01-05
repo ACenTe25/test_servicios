@@ -16,7 +16,7 @@ fn abrir_twinkle() {
     println!(" [I] ABRIENDO TWINKLE...");
 
     let mut proc_twinkle = Command::new("twinkle")
-    .args(["-c", "-f", "twinkle.cfg"])
+    .args(["-c", "-f", "/home/nsm/.twinkle/twinkle.cfg"])
     .spawn()
     .expect("[E] FALLA AL ABRIR TWINKLE");
 
@@ -24,13 +24,25 @@ fn abrir_twinkle() {
 
     let mut stdout_twinkle = String::new();
 
-    proc_twinkle.stdout.take().unwrap().read_to_string(&mut stdout_twinkle)
-    .expect("[E] FALLA AL LEER STDOUT DE ABRIR TWINKLE");
+    let stdout_child = match proc_twinkle.stdout.take() {
+        Some(mut stdout) => stdout.read_to_string(&mut stdout_twinkle).expect("[E] FALLA AL LEER STDOUT DE ABRIR TWINKLE"),
+        None => {
+            stdout_twinkle = "(stdout vacío)".to_string();
+            0
+        }
+    };
 
     let mut stderr_twinkle = String::new();
 
-    proc_twinkle.stderr.take().unwrap().read_to_string(&mut stderr_twinkle)
-    .expect("[E] FALLA AL LEER STDERR DE ABRIR TWINKLE");
+    let stderr_child = match proc_twinkle.stderr.take() {
+        Some(mut stderr) => stderr.read_to_string(&mut stderr_twinkle).expect("[E] FALLA AL LEER STDERR DE ABRIR TWINKLE"),
+        None => {
+            stderr_twinkle = "(stderr vacío)".to_string();
+            0
+        }
+    };
+
+    println!(" [I] CERRANDO TWINKLE...");
 
     Command::new("twinkle")
     .args(["-c", "--cmd", "quit"])
