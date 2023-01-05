@@ -7,7 +7,7 @@ fn main() {
     
     println!("[I] ARRANQUE");
 
-    abre_twinkle_con_sh_inyectando_stdin();
+    abrir_twinkle();
 
     println!("[I] FIN");
 
