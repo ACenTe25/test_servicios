@@ -28,6 +28,9 @@ fn llama_con_baresip() {
     let stdin_baresip = baresip.stdin.as_mut().unwrap();
 
     stdin_baresip.write(b"9184\n").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
+    sleep(Duration::from_secs(1));
+
+    stdin_baresip.write(b"950915").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
 
     println!("   [I] LLAMADA COLOCADA. ESPERANDO...");
     sleep(Duration::from_secs(10));
