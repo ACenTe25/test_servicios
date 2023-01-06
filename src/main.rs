@@ -30,17 +30,17 @@ fn llama_con_baresip() {
     stdin_baresip.write(b"9184\n").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
     sleep(Duration::from_secs(1));
 
-    stdin_baresip.write(b"950915\n").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
+    stdin_baresip.write(b"9").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
 
     println!("   [I] LLAMADA COLOCADA. ESPERANDO...");
     sleep(Duration::from_secs(10));
 
     println!("   [I] ESPERA TERMINADA. COLGANDO...");
-    stdin_baresip.write(b"b\n").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
+    stdin_baresip.write(b"b").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
     sleep(Duration::from_secs(1));
 
     println!("   [I] COLGADO. CERRANDO BARESIP...");
-    stdin_baresip.write(b"q\n").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
+    stdin_baresip.write(b"q").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
 
     let salida_baresip = baresip.wait_with_output().expect("[E] ERROR AL TERMINAR BARESIP");
     let stdout_baresip = String::from_utf8_lossy(&salida_baresip.stdout);
