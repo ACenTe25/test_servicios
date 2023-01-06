@@ -30,7 +30,7 @@ fn llama_con_baresip() {
     stdin_baresip.write(b"9184\n").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
     sleep(Duration::from_secs(1));
 
-    stdin_baresip.write(b"950915").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
+    stdin_baresip.write(b"950915\n").expect("[E] ERROR AL ENVIAR POR STDIN BARESIP");
 
     println!("   [I] LLAMADA COLOCADA. ESPERANDO...");
     sleep(Duration::from_secs(10));
